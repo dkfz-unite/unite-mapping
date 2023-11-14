@@ -1,0 +1,120 @@
+﻿using Unite.Data.Entities.Donors;
+using Unite.Data.Entities.Donors.Clinical;
+using Unite.Data.Extensions;
+using Unite.Indices.Entities.Basic.Donors;
+
+namespace Unite.Mapping;
+
+public class DonorIndexMapper
+{
+    /// <summary>
+    /// Maps entity to index. Does nothing if either entity or index is null.
+    /// </summary>
+    /// <param name="entity">Entity.</param>
+    /// <param name="index">Index.</param>
+    public static void Map(in Donor entity, DonorIndex index)
+    {
+        if (entity == null || index == null)
+        {
+            return;
+        }
+
+        var diagnosisDate = entity.ClinicalData?.DiagnosisDate;
+
+        index.Id = entity.Id;
+        index.ReferenceId = entity.ReferenceId;
+        index.MtaProtected = entity.MtaProtected;
+
+        index.ClinicalData = CreateFrom(entity.ClinicalData);
+        index.Treatments = CreateFrom(entity.Treatments, diagnosisDate);
+        index.Projects = CreateFrom(entity.DonorProjects);
+        index.Studies = CreateFrom(entity.DonorStudies);
+    }
+
+
+    private static ClinicalDataIndex CreateFrom(in ClinicalData entity)
+    {
+        if (entity == null)
+        {
+            return null;
+        }
+
+        return new ClinicalDataIndex
+        {
+            Sex = entity.SexId?.ToDefinitionString(),
+            Age = entity.Age,
+            Diagnosis = entity.Diagnosis,
+            PrimarySite = entity.PrimarySite?.Value,
+            Localization = entity.Localization?.Value,
+            VitalStatus = entity.VitalStatus,
+            VitalStatusChangeDay = entity.VitalStatusChangeDate.RelativeFrom(entity.DiagnosisDate) ?? entity.VitalStatusChangeDay,
+            ProgressionStatus = entity.ProgressionStatus,
+            ProgressionStatusChangeDay = entity.ProgressionStatusChangeDate.RelativeFrom(entity.DiagnosisDate) ?? entity.ProgressionStatusChangeDay,
+            KpsBaseline = entity.KpsBaseline,
+            SteroidsBaseline = entity.SteroidsBaseline
+        };
+    }
+
+    private static TreatmentIndex[] CreateFrom(in IEnumerable<Treatment> entities, DateOnly? diagnosisDate)
+    {
+        if (entities?.Any() != true)
+        {
+            return null;
+        }
+
+        return entities.Select(entity =>
+        {
+            var index = new TreatmentIndex
+            {
+                Therapy = entity.Therapy.Name,
+                Details = entity.Details,
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
+                Results = entity.Results
+            };
+
+            return index;
+
+        }).ToArray();
+    }
+
+    private static ProjectIndex[] CreateFrom(in IEnumerable<ProjectDonor> entities)
+    {
+        if (entities?.Any() != true)
+        {
+            return null;
+        }
+
+        return entities.Select(entity =>
+        {
+            var index = new ProjectIndex
+            {
+                Id = entity.Project.Id,
+                Name = entity.Project.Name
+            };
+
+            return index;
+
+        }).ToArray();
+    }
+
+    private static StudyIndex[] CreateFrom(in IEnumerable<StudyDonor> entities)
+    {
+        if (entities.Any() != true)
+        {
+            return null;
+        }
+
+        return entities.Select(entity =>
+        {
+            var index = new StudyIndex
+            {
+                Id = entity.Study.Id,
+                Name = entity.Study.Name
+            };
+
+            return index;
+
+        }).ToArray();
+    }
+}

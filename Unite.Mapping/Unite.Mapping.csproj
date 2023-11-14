@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- <Nullable>enable</Nullable> -->
+    <ReleaseVersion>1.0.0</ReleaseVersion>
+    <Version>1.0.0</Version>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
+    <RepositoryUrl>https://github.com/dkfz-unite/unite-mapping</RepositoryUrl>
+    <Authors>Valiantsin Ulasau (DKFZ)</Authors>
+    <Description>Unite mapping from domain models to indices package.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Unite.Data" Version="6.0.0" />
+    <PackageReference Include="Unite.Indices" Version="6.0.0" />
+  </ItemGroup>
+</Project>
