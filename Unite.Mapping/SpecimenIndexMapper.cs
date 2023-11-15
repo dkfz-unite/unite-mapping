@@ -7,14 +7,36 @@ using XenograftIntervention = Unite.Data.Entities.Specimens.Xenografts.Intervent
 
 namespace Unite.Mapping;
 
+
 public class SpecimenIndexMapper
 {
+    /// <summary>
+    /// Creates an index from the entity. Returns null if entity is null.
+    /// </summary>
+    /// <param name="entity">Entity.</param>
+    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative creation and intervention days if they are not set.</param> 
+    /// <typeparam name="T">Type of the index.</typeparam>
+    /// <returns>Index created from the entity.</returns>
+    public static T CreateFrom<T>(in Specimen specimen, DateOnly? diagnosisDate) where T : SpecimenIndex, new()
+    {
+        if (specimen == null)
+        {
+            return null;
+        }
+
+        var index = new T();
+
+        Map(specimen, index, diagnosisDate);
+
+        return index;
+    }
+
     /// <summary>
     /// Maps entity to index. Does nothing if either entity or index is null.
     /// </summary>
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
-    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative creation and intervention days if it's not set.</param>
+    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative creation and intervention days if they are not set.</param>
     public static void Map(in Specimen specimen, SpecimenIndex index, DateOnly? diagnosisDate)
     {
         if (specimen == null)

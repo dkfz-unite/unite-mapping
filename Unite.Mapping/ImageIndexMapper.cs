@@ -7,6 +7,27 @@ namespace Unite.Mapping;
 public class ImageIndexMapper
 {
     /// <summary>
+    /// Creates an index from the entity. Returns null if entity is null.
+    /// </summary>
+    /// <param name="entity">Entity.</param>
+    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative scanning day if it's not set.</param>
+    /// <typeparam name="T">Type of the index.</typeparam>
+    /// <returns>Index created from the entity.</returns>
+    public static T CreateFrom<T>(in Image entity, DateOnly? diagnosisDate) where T : ImageIndex, new()
+    {
+        if (entity == null)
+        {
+            return null;
+        }
+
+        var index = new T();
+
+        Map(entity, index, diagnosisDate);
+
+        return index;
+    }
+
+    /// <summary>
     /// Maps entity to index. Does nothing if either entity or index is null.
     /// </summary>
     /// <param name="entity">Entity.</param>

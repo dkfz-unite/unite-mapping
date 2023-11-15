@@ -4,6 +4,7 @@ using Unite.Data.Extensions;
 using Unite.Data.Utilities.Mutations;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Variants;
+using Unite.Mapping;
 
 using CNV = Unite.Data.Entities.Genome.Variants.CNV;
 using SSM = Unite.Data.Entities.Genome.Variants.SSM;
@@ -13,6 +14,26 @@ namespace Unite.Genome.Indices.Services.Mappers;
 
 public class VariantIndexMapper
 {
+    /// <summary>
+    /// Creates an index from the entity. Returns null if entity is null.
+    /// </summary>
+    /// <param name="entity">Entity.</param>
+    /// <typeparam name="T">Type of the index.</typeparam>
+    /// <returns>Index created from the entity.</returns>
+    public static T CreateFrom<T>(in Variant entity) where T : VariantIndex, new()
+    {
+        if (entity == null)
+        {
+            return null;
+        }
+
+        var index = new T();
+
+        Map(entity, index);
+
+        return index;
+    }
+
     /// <summary>
     /// Maps entity to index. Does nothing if either entity or index is null.
     /// </summary>
@@ -288,24 +309,7 @@ public class VariantIndexMapper
 
     private static GeneIndex CreateFrom(in Gene entity)
     {
-        if (entity == null)
-        {
-            return null;
-        }
-
-        return new GeneIndex
-        {
-            Id = entity.Id,
-            StableId = entity.StableId,
-            Symbol = entity.Symbol,
-            Description = entity.Description,
-            Biotype = entity.Biotype,
-            Chromosome = entity.ChromosomeId.ToDefinitionString(),
-            Start = entity.Start,
-            End = entity.End,
-            Strand = entity.Strand,
-            ExonicLength = entity.ExonicLength
-        };
+        return GeneIndexMapper.CreateFrom<GeneIndex>(entity);
     }
 
     private static TranscriptIndex CreateFrom(in Transcript entity)

@@ -8,6 +8,26 @@ namespace Unite.Mapping;
 public class DonorIndexMapper
 {
     /// <summary>
+    /// Creates an index from the entity. Returns null if entity is null.
+    /// </summary>
+    /// <param name="entity">Entity.</param>
+    /// <typeparam name="T">Type of the index.</typeparam>
+    /// <returns>Index created from the entity.</returns>
+    public static T CreateFrom<T>(in Donor entity) where T : DonorIndex, new()
+    {
+        if (entity == null)
+        {
+            return null;
+        }
+
+        var index = new T();
+
+        Map(entity, index);
+
+        return index;
+    }
+
+    /// <summary>
     /// Maps entity to index. Does nothing if either entity or index is null.
     /// </summary>
     /// <param name="entity">Entity.</param>
