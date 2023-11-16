@@ -39,14 +39,12 @@ public class DonorIndexMapper
             return;
         }
 
-        var diagnosisDate = entity.ClinicalData?.DiagnosisDate;
-
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.MtaProtected = entity.MtaProtected;
 
         index.ClinicalData = CreateFrom(entity.ClinicalData);
-        index.Treatments = CreateFrom(entity.Treatments, diagnosisDate);
+        index.Treatments = CreateFrom(entity.Treatments);
         index.Projects = CreateFrom(entity.DonorProjects);
         index.Studies = CreateFrom(entity.DonorStudies);
     }
@@ -67,15 +65,15 @@ public class DonorIndexMapper
             PrimarySite = entity.PrimarySite?.Value,
             Localization = entity.Localization?.Value,
             VitalStatus = entity.VitalStatus,
-            VitalStatusChangeDay = entity.VitalStatusChangeDate.RelativeFrom(entity.DiagnosisDate) ?? entity.VitalStatusChangeDay,
+            VitalStatusChangeDay = entity.VitalStatusChangeDay,
             ProgressionStatus = entity.ProgressionStatus,
-            ProgressionStatusChangeDay = entity.ProgressionStatusChangeDate.RelativeFrom(entity.DiagnosisDate) ?? entity.ProgressionStatusChangeDay,
+            ProgressionStatusChangeDay = entity.ProgressionStatusChangeDay,
             KpsBaseline = entity.KpsBaseline,
             SteroidsBaseline = entity.SteroidsBaseline
         };
     }
 
-    private static TreatmentIndex[] CreateFrom(in IEnumerable<Treatment> entities, DateOnly? diagnosisDate)
+    private static TreatmentIndex[] CreateFrom(in IEnumerable<Treatment> entities)
     {
         if (entities?.Any() != true)
         {
@@ -88,8 +86,8 @@ public class DonorIndexMapper
             {
                 Therapy = entity.Therapy.Name,
                 Details = entity.Details,
-                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
-                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
+                StartDay = entity.StartDay,
+                DurationDays = entity.DurationDays,
                 Results = entity.Results
             };
 

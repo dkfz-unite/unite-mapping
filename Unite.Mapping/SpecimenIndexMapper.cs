@@ -14,10 +14,9 @@ public class SpecimenIndexMapper
     /// Creates an index from the entity. Returns null if entity is null.
     /// </summary>
     /// <param name="entity">Entity.</param>
-    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative creation and intervention days if they are not set.</param> 
     /// <typeparam name="T">Type of the index.</typeparam>
     /// <returns>Index created from the entity.</returns>
-    public static T CreateFrom<T>(in Specimen specimen, DateOnly? diagnosisDate) where T : SpecimenIndex, new()
+    public static T CreateFrom<T>(in Specimen specimen) where T : SpecimenIndex, new()
     {
         if (specimen == null)
         {
@@ -26,7 +25,7 @@ public class SpecimenIndexMapper
 
         var index = new T();
 
-        Map(specimen, index, diagnosisDate);
+        Map(specimen, index);
 
         return index;
     }
@@ -36,10 +35,9 @@ public class SpecimenIndexMapper
     /// </summary>
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
-    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative creation and intervention days if they are not set.</param>
-    public static void Map(in Specimen specimen, SpecimenIndex index, DateOnly? diagnosisDate)
+    public static void Map(in Specimen specimen, SpecimenIndex index)
     {
-        if (specimen == null)
+        if (specimen == null || index == null)
         {
             return;
         }
@@ -47,12 +45,12 @@ public class SpecimenIndexMapper
         index.Id = specimen.Id;
         index.ReferenceId = specimen.ReferenceId;
         index.Type = specimen.TypeId.ToDefinitionString();
-        index.CreationDay = specimen.CreationDate.RelativeFrom(diagnosisDate) ?? specimen.CreationDay;
+        index.CreationDay = specimen.CreationDay;
 
         index.Tissue = CreateFromTissue(specimen);
         index.Cell = CreateFromCellLine(specimen);
-        index.Organoid = CreateFromOrganoid(specimen, specimen.CreationDate);
-        index.Xenograft = CreateFromXenograft(specimen, specimen.CreationDate);
+        index.Organoid = CreateFromOrganoid(specimen);
+        index.Xenograft = CreateFromXenograft(specimen);
     }
 
 
@@ -104,7 +102,7 @@ public class SpecimenIndexMapper
         };
     }
 
-    private static OrganoidIndex CreateFromOrganoid(in Specimen specimen, DateOnly? specimenCreationDate)
+    private static OrganoidIndex CreateFromOrganoid(in Specimen specimen)
     {
         if (specimen.Organoid == null)
         {
@@ -120,11 +118,11 @@ public class SpecimenIndexMapper
 
             MolecularData = CreateFrom(specimen.MolecularData),
             DrugScreenings = CreateFrom(specimen.DrugScreenings),
-            Interventions = CreateFrom(specimen.Organoid.Interventions, specimenCreationDate)
+            Interventions = CreateFrom(specimen.Organoid.Interventions)
         };
     }
 
-    private static OrganoidInterventionIndex[] CreateFrom(in IEnumerable<OrganoidIntervention> interventions, DateOnly? specimenCreationDate)
+    private static OrganoidInterventionIndex[] CreateFrom(in IEnumerable<OrganoidIntervention> interventions)
     {
         if (interventions?.Any() != true)
         {
@@ -137,15 +135,15 @@ public class SpecimenIndexMapper
             {
                 Type = intervention.Type.Name,
                 Details = intervention.Details,
-                StartDay = intervention.StartDate.RelativeFrom(specimenCreationDate) ?? intervention.StartDay,
-                DurationDays = intervention.EndDate.RelativeFrom(intervention.StartDate) ?? intervention.DurationDays,
+                StartDay = intervention.StartDay,
+                DurationDays = intervention.DurationDays,
                 Results = intervention.Results
             };
 
         }).ToArray();
     }
 
-    private static XenograftIndex CreateFromXenograft(in Specimen specimen, DateOnly? specimenCreationDate)
+    private static XenograftIndex CreateFromXenograft(in Specimen specimen)
     {
         if (specimen.Xenograft == null)
         {
@@ -168,11 +166,11 @@ public class SpecimenIndexMapper
 
             MolecularData = CreateFrom(specimen.MolecularData),
             DrugScreenings = CreateFrom(specimen.DrugScreenings),
-            Interventions = CreateFrom(specimen.Xenograft.Interventions, specimenCreationDate)
+            Interventions = CreateFrom(specimen.Xenograft.Interventions)
         };
     }
 
-    private static XenograftInterventionIndex[] CreateFrom(in IEnumerable<XenograftIntervention> interventions, DateOnly? specimenCreationDate)
+    private static XenograftInterventionIndex[] CreateFrom(in IEnumerable<XenograftIntervention> interventions)
     {
         if (interventions?.Any() != true)
         {
@@ -185,8 +183,8 @@ public class SpecimenIndexMapper
             {
                 Type = intervention.Type.Name,
                 Details = intervention.Details,
-                StartDay = intervention.StartDate.RelativeFrom(specimenCreationDate) ?? intervention.StartDay,
-                DurationDays = intervention.EndDate.RelativeFrom(intervention.StartDate) ?? intervention.DurationDays,
+                StartDay = intervention.StartDay,
+                DurationDays = intervention.DurationDays,
                 Results = intervention.Results
             };
 

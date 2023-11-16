@@ -10,10 +10,9 @@ public class ImageIndexMapper
     /// Creates an index from the entity. Returns null if entity is null.
     /// </summary>
     /// <param name="entity">Entity.</param>
-    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative scanning day if it's not set.</param>
     /// <typeparam name="T">Type of the index.</typeparam>
     /// <returns>Index created from the entity.</returns>
-    public static T CreateFrom<T>(in Image entity, DateOnly? diagnosisDate) where T : ImageIndex, new()
+    public static T CreateFrom<T>(in Image entity) where T : ImageIndex, new()
     {
         if (entity == null)
         {
@@ -22,7 +21,7 @@ public class ImageIndexMapper
 
         var index = new T();
 
-        Map(entity, index, diagnosisDate);
+        Map(entity, index);
 
         return index;
     }
@@ -32,8 +31,7 @@ public class ImageIndexMapper
     /// </summary>
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
-    /// <param name="diagnosisDate">Diagnosis date. Used to calculate relative scanning day if it's not set.</param>
-    public static void Map(in Image entity, ImageIndex index, DateOnly? diagnosisDate)
+    public static void Map(in Image entity, ImageIndex index)
     {
         if (entity == null || index == null)
         {
@@ -43,7 +41,7 @@ public class ImageIndexMapper
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.Type = entity.TypeId.ToDefinitionString();
-        index.ScanningDay = entity.CreationDay ?? entity.CreationDate.RelativeFrom(diagnosisDate);
+        index.ScanningDay = entity.CreationDay;
 
         index.Mri = CreateFrom(entity.MriImage);
     }
