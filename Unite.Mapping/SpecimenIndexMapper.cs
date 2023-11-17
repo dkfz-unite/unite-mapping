@@ -223,7 +223,7 @@ public class SpecimenIndexMapper
                 Dss = screening.Dss,
                 DssSelective = screening.DssSelective,
                 Gof = screening.Gof,
-                Drug = screening.Feature.Name,
+                Drug = screening.Entity.Name,
                 MinConcentration = screening.MinConcentration,
                 MaxConcentration = screening.MaxConcentration,
                 AbsIC25 = screening.AbsIC25,
