@@ -1,7 +1,7 @@
 ﻿using Unite.Data.Entities.Genome;
 using Unite.Data.Entities.Genome.Variants;
 using Unite.Data.Extensions;
-using Unite.Data.Utilities.Mutations;
+using Unite.Data.Utilities.SSM;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Variants;
 using Unite.Mapping;
@@ -109,14 +109,14 @@ public class VariantIndexMapper
     }
 
 
-    private static MutationIndex CreateFrom(in SSM.Variant entity)
+    private static SsmIndex CreateFrom(in SSM.Variant entity)
     {
         if (entity == null)
         {
             return null;
         }
 
-        return new MutationIndex
+        return new SsmIndex
         {
             Id = entity.Id,
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
@@ -131,14 +131,14 @@ public class VariantIndexMapper
         };
     }
 
-    private static CopyNumberVariantIndex CreateFrom(in CNV.Variant entity)
+    private static CnvIndex CreateFrom(in CNV.Variant entity)
     {
         if (entity == null)
         {
             return null;
         }
 
-        return new CopyNumberVariantIndex
+        return new CnvIndex
         {
             Id = entity.Id,
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
@@ -159,14 +159,14 @@ public class VariantIndexMapper
         };
     }
 
-    private static StructuralVariantIndex CreateFrom(in SV.Variant entity)
+    private static SvIndex CreateFrom(in SV.Variant entity)
     {
         if (entity == null)
         {
             return null;
         }
 
-        return new StructuralVariantIndex
+        return new SvIndex
         {
             Id = entity.Id,
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
