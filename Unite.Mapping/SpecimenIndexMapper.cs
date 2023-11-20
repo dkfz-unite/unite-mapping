@@ -14,18 +14,19 @@ public class SpecimenIndexMapper
     /// Creates an index from the entity. Returns null if entity is null.
     /// </summary>
     /// <param name="entity">Entity.</param>
+    /// <param name="diagnosisDate">Diagnosis date (anchor date for calculation of relative days).</param>
     /// <typeparam name="T">Type of the index.</typeparam>
     /// <returns>Index created from the entity.</returns>
-    public static T CreateFrom<T>(in Specimen specimen) where T : SpecimenIndex, new()
+    public static T CreateFrom<T>(in Specimen entity, DateOnly? diagnosisDate) where T : SpecimenIndex, new()
     {
-        if (specimen == null)
+        if (entity == null)
         {
             return null;
         }
 
         var index = new T();
 
-        Map(specimen, index);
+        Map(entity, index, diagnosisDate);
 
         return index;
     }
@@ -35,200 +36,201 @@ public class SpecimenIndexMapper
     /// </summary>
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
-    public static void Map(in Specimen specimen, SpecimenIndex index)
+    /// <param name="diagnosisDate">Diagnosis date (anchor date for calculation of relative days).</param> 
+    public static void Map(in Specimen entity, SpecimenIndex index, DateOnly? diagnosisDate)
     {
-        if (specimen == null || index == null)
+        if (entity == null || index == null)
         {
             return;
         }
 
-        index.Id = specimen.Id;
-        index.ReferenceId = specimen.ReferenceId;
-        index.Type = specimen.TypeId.ToDefinitionString();
-        index.CreationDay = specimen.CreationDay;
+        index.Id = entity.Id;
+        index.ReferenceId = entity.ReferenceId;
+        index.Type = entity.TypeId.ToDefinitionString();
+        index.CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate);
 
-        index.Tissue = CreateFromTissue(specimen);
-        index.Cell = CreateFromCellLine(specimen);
-        index.Organoid = CreateFromOrganoid(specimen);
-        index.Xenograft = CreateFromXenograft(specimen);
+        index.Tissue = CreateFromTissue(entity);
+        index.Cell = CreateFromCellLine(entity);
+        index.Organoid = CreateFromOrganoid(entity, diagnosisDate);
+        index.Xenograft = CreateFromXenograft(entity, diagnosisDate);
     }
 
 
-    private static TissueIndex CreateFromTissue(in Specimen specimen)
+    private static TissueIndex CreateFromTissue(in Specimen entity)
     {
-        if (specimen.Tissue == null)
+        if (entity.Tissue == null)
         {
             return null;
         }
 
         return new TissueIndex
         {
-            ReferenceId = specimen.Tissue.ReferenceId,
+            ReferenceId = entity.Tissue.ReferenceId,
 
-            Type = specimen.Tissue.TypeId?.ToDefinitionString(),
-            TumorType = specimen.Tissue.TumorTypeId?.ToDefinitionString(),
-            Source = specimen.Tissue.Source?.Value,
+            Type = entity.Tissue.TypeId?.ToDefinitionString(),
+            TumorType = entity.Tissue.TumorTypeId?.ToDefinitionString(),
+            Source = entity.Tissue.Source?.Value,
 
-            MolecularData = CreateFrom(specimen.MolecularData)
+            MolecularData = CreateFrom(entity.MolecularData)
         };
     }
 
-    private static CellLineIndex CreateFromCellLine(in Specimen specimen)
+    private static CellLineIndex CreateFromCellLine(in Specimen entity)
     {
-        if (specimen.CellLine == null)
+        if (entity.CellLine == null)
         {
             return null;
         }
 
         return new CellLineIndex
         {
-            ReferenceId = specimen.CellLine.ReferenceId,
+            ReferenceId = entity.CellLine.ReferenceId,
 
-            Species = specimen.CellLine.SpeciesId?.ToDefinitionString(),
-            Type = specimen.CellLine.TypeId?.ToDefinitionString(),
-            CultureType = specimen.CellLine.CultureTypeId?.ToDefinitionString(),
+            Species = entity.CellLine.SpeciesId?.ToDefinitionString(),
+            Type = entity.CellLine.TypeId?.ToDefinitionString(),
+            CultureType = entity.CellLine.CultureTypeId?.ToDefinitionString(),
 
-            Name = specimen.CellLine.Info?.Name,
-            DepositorName = specimen.CellLine.Info?.DepositorName,
-            DepositorEstablishment = specimen.CellLine.Info?.DepositorEstablishment,
-            EstablishmentDate = specimen.CellLine.Info?.EstablishmentDate,
+            Name = entity.CellLine.Info?.Name,
+            DepositorName = entity.CellLine.Info?.DepositorName,
+            DepositorEstablishment = entity.CellLine.Info?.DepositorEstablishment,
+            EstablishmentDate = entity.CellLine.Info?.EstablishmentDate,
 
-            PubMedLink = specimen.CellLine.Info?.PubMedLink,
-            AtccLink = specimen.CellLine.Info?.AtccLink,
-            ExPasyLink = specimen.CellLine.Info?.ExPasyLink,
+            PubMedLink = entity.CellLine.Info?.PubMedLink,
+            AtccLink = entity.CellLine.Info?.AtccLink,
+            ExPasyLink = entity.CellLine.Info?.ExPasyLink,
 
-            MolecularData = CreateFrom(specimen.MolecularData),
-            DrugScreenings = CreateFrom(specimen.DrugScreenings)
+            MolecularData = CreateFrom(entity.MolecularData),
+            DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
     }
 
-    private static OrganoidIndex CreateFromOrganoid(in Specimen specimen)
+    private static OrganoidIndex CreateFromOrganoid(in Specimen entity, DateOnly? diagnosisDate)
     {
-        if (specimen.Organoid == null)
+        if (entity.Organoid == null)
         {
             return null;
         }
 
         return new OrganoidIndex
         {
-            ReferenceId = specimen.Organoid.ReferenceId,
-            ImplantedCellsNumber = specimen.Organoid.ImplantedCellsNumber,
-            Tumorigenicity = specimen.Organoid.Tumorigenicity,
-            Medium = specimen.Organoid.Medium,
+            ReferenceId = entity.Organoid.ReferenceId,
+            ImplantedCellsNumber = entity.Organoid.ImplantedCellsNumber,
+            Tumorigenicity = entity.Organoid.Tumorigenicity,
+            Medium = entity.Organoid.Medium,
 
-            MolecularData = CreateFrom(specimen.MolecularData),
-            DrugScreenings = CreateFrom(specimen.DrugScreenings),
-            Interventions = CreateFrom(specimen.Organoid.Interventions)
+            MolecularData = CreateFrom(entity.MolecularData),
+            DrugScreenings = CreateFrom(entity.DrugScreenings),
+            Interventions = CreateFrom(entity.Organoid.Interventions, diagnosisDate)
         };
     }
 
-    private static OrganoidInterventionIndex[] CreateFrom(in IEnumerable<OrganoidIntervention> interventions)
+    private static OrganoidInterventionIndex[] CreateFrom(in IEnumerable<OrganoidIntervention> entities, DateOnly? diagnosisDate)
     {
-        if (interventions?.Any() != true)
+        if (entities?.Any() != true)
         {
             return null;
         }
 
-        return interventions.Select(intervention =>
+        return entities.Select(entity =>
         {
             return new OrganoidInterventionIndex
             {
-                Type = intervention.Type.Name,
-                Details = intervention.Details,
-                StartDay = intervention.StartDay,
-                DurationDays = intervention.DurationDays,
-                Results = intervention.Results
+                Type = entity.Type.Name,
+                Details = entity.Details,
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
+                Results = entity.Results
             };
 
         }).ToArray();
     }
 
-    private static XenograftIndex CreateFromXenograft(in Specimen specimen)
+    private static XenograftIndex CreateFromXenograft(in Specimen entity, DateOnly? diagnosisDate)
     {
-        if (specimen.Xenograft == null)
+        if (entity.Xenograft == null)
         {
             return null;
         }
 
         return new XenograftIndex
         {
-            ReferenceId = specimen.Xenograft.ReferenceId,
+            ReferenceId = entity.Xenograft.ReferenceId,
 
-            MouseStrain = specimen.Xenograft.MouseStrain,
-            GroupSize = specimen.Xenograft.GroupSize,
-            ImplantType = specimen.Xenograft.ImplantTypeId?.ToDefinitionString(),
-            TissueLocation = specimen.Xenograft.TissueLocationId?.ToDefinitionString(),
-            ImplantedCellsNumber = specimen.Xenograft.ImplantedCellsNumber,
-            Tumorigenicity = specimen.Xenograft.Tumorigenicity,
-            TumorGrowthForm = specimen.Xenograft.TumorGrowthFormId?.ToDefinitionString(),
-            SurvivalDaysFrom = specimen.Xenograft.SurvivalDaysFrom,
-            SurvivalDaysTo = specimen.Xenograft.SurvivalDaysTo,
+            MouseStrain = entity.Xenograft.MouseStrain,
+            GroupSize = entity.Xenograft.GroupSize,
+            ImplantType = entity.Xenograft.ImplantTypeId?.ToDefinitionString(),
+            TissueLocation = entity.Xenograft.TissueLocationId?.ToDefinitionString(),
+            ImplantedCellsNumber = entity.Xenograft.ImplantedCellsNumber,
+            Tumorigenicity = entity.Xenograft.Tumorigenicity,
+            TumorGrowthForm = entity.Xenograft.TumorGrowthFormId?.ToDefinitionString(),
+            SurvivalDaysFrom = entity.Xenograft.SurvivalDaysFrom,
+            SurvivalDaysTo = entity.Xenograft.SurvivalDaysTo,
 
-            MolecularData = CreateFrom(specimen.MolecularData),
-            DrugScreenings = CreateFrom(specimen.DrugScreenings),
-            Interventions = CreateFrom(specimen.Xenograft.Interventions)
+            MolecularData = CreateFrom(entity.MolecularData),
+            DrugScreenings = CreateFrom(entity.DrugScreenings),
+            Interventions = CreateFrom(entity.Xenograft.Interventions, diagnosisDate)
         };
     }
 
-    private static XenograftInterventionIndex[] CreateFrom(in IEnumerable<XenograftIntervention> interventions)
+    private static XenograftInterventionIndex[] CreateFrom(in IEnumerable<XenograftIntervention> entities, DateOnly? diagnosisDate)
     {
-        if (interventions?.Any() != true)
+        if (entities?.Any() != true)
         {
             return null;
         }
 
-        return interventions.Select(intervention =>
+        return entities.Select(entity =>
         {
             return new XenograftInterventionIndex
             {
-                Type = intervention.Type.Name,
-                Details = intervention.Details,
-                StartDay = intervention.StartDay,
-                DurationDays = intervention.DurationDays,
-                Results = intervention.Results
+                Type = entity.Type.Name,
+                Details = entity.Details,
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
+                Results = entity.Results
             };
 
         }).ToArray();
     }
 
-    private static MolecularDataIndex CreateFrom(in MolecularData molecularData)
+    private static MolecularDataIndex CreateFrom(in MolecularData entity)
     {
-        if (molecularData == null)
+        if (entity == null)
         {
             return null;
         }
 
         return new MolecularDataIndex
         {
-            MgmtStatus = molecularData.MgmtStatusId?.ToDefinitionString(),
-            IdhStatus = molecularData.IdhStatusId?.ToDefinitionString(),
-            IdhMutation = molecularData.IdhMutationId?.ToDefinitionString(),
-            GeneExpressionSubtype = molecularData.GeneExpressionSubtypeId?.ToDefinitionString(),
-            MethylationSubtype = molecularData.MethylationSubtypeId?.ToDefinitionString(),
-            GcimpMethylation = molecularData.GcimpMethylation
+            MgmtStatus = entity.MgmtStatusId?.ToDefinitionString(),
+            IdhStatus = entity.IdhStatusId?.ToDefinitionString(),
+            IdhMutation = entity.IdhMutationId?.ToDefinitionString(),
+            GeneExpressionSubtype = entity.GeneExpressionSubtypeId?.ToDefinitionString(),
+            MethylationSubtype = entity.MethylationSubtypeId?.ToDefinitionString(),
+            GcimpMethylation = entity.GcimpMethylation
         };
     }
 
-    private static DrugScreeningIndex[] CreateFrom(in IEnumerable<DrugScreening> screenings)
+    private static DrugScreeningIndex[] CreateFrom(in IEnumerable<DrugScreening> entities)
     {
-        if (screenings?.Any() != true)
+        if (entities?.Any() != true)
         {
             return null;
         }
 
-        return screenings.Select(screening =>
+        return entities.Select(entity =>
         {
             return new DrugScreeningIndex
             {
-                Dss = screening.Dss,
-                DssSelective = screening.DssSelective,
-                Gof = screening.Gof,
-                Drug = screening.Entity.Name,
-                MinConcentration = screening.MinConcentration,
-                MaxConcentration = screening.MaxConcentration,
-                AbsIC25 = screening.AbsIC25,
-                AbsIC50 = screening.AbsIC50,
-                AbsIC75 = screening.AbsIC75
+                Dss = entity.Dss,
+                DssSelective = entity.DssSelective,
+                Gof = entity.Gof,
+                Drug = entity.Entity.Name,
+                MinConcentration = entity.MinConcentration,
+                MaxConcentration = entity.MaxConcentration,
+                AbsIC25 = entity.AbsIC25,
+                AbsIC50 = entity.AbsIC50,
+                AbsIC75 = entity.AbsIC75
             };
 
         }).ToArray();

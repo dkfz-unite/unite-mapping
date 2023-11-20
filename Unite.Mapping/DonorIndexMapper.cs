@@ -39,18 +39,20 @@ public class DonorIndexMapper
             return;
         }
 
+        var diagnosisDate = entity.ClinicalData?.DiagnosisDate;
+
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.MtaProtected = entity.MtaProtected;
 
-        index.ClinicalData = CreateFrom(entity.ClinicalData);
-        index.Treatments = CreateFrom(entity.Treatments);
+        index.ClinicalData = CreateFrom(entity.ClinicalData, diagnosisDate);
+        index.Treatments = CreateFrom(entity.Treatments, diagnosisDate);
         index.Projects = CreateFrom(entity.DonorProjects);
         index.Studies = CreateFrom(entity.DonorStudies);
     }
 
 
-    private static ClinicalDataIndex CreateFrom(in ClinicalData entity)
+    private static ClinicalDataIndex CreateFrom(in ClinicalData entity, DateOnly? diagnosisDate)
     {
         if (entity == null)
         {
@@ -65,15 +67,15 @@ public class DonorIndexMapper
             PrimarySite = entity.PrimarySite?.Value,
             Localization = entity.Localization?.Value,
             VitalStatus = entity.VitalStatus,
-            VitalStatusChangeDay = entity.VitalStatusChangeDay,
+            VitalStatusChangeDay = entity.VitalStatusChangeDay ?? entity.VitalStatusChangeDate?.RelativeFrom(diagnosisDate),
             ProgressionStatus = entity.ProgressionStatus,
-            ProgressionStatusChangeDay = entity.ProgressionStatusChangeDay,
+            ProgressionStatusChangeDay = entity.ProgressionStatusChangeDay ?? entity.ProgressionStatusChangeDate?.RelativeFrom(diagnosisDate),
             KpsBaseline = entity.KpsBaseline,
             SteroidsBaseline = entity.SteroidsBaseline
         };
     }
 
-    private static TreatmentIndex[] CreateFrom(in IEnumerable<Treatment> entities)
+    private static TreatmentIndex[] CreateFrom(in IEnumerable<Treatment> entities, DateOnly? diagnosisDate)
     {
         if (entities?.Any() != true)
         {
@@ -86,8 +88,8 @@ public class DonorIndexMapper
             {
                 Therapy = entity.Therapy.Name,
                 Details = entity.Details,
-                StartDay = entity.StartDay,
-                DurationDays = entity.DurationDays,
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
                 Results = entity.Results
             };
 
