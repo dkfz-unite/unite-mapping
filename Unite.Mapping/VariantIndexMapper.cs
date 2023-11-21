@@ -1,7 +1,7 @@
 ﻿using Unite.Data.Entities.Genome;
 using Unite.Data.Entities.Genome.Variants;
 using Unite.Data.Extensions;
-using Unite.Data.Utilities.SSM;
+using Unite.Data.Utilities.Mutations;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Variants;
 using Unite.Mapping;

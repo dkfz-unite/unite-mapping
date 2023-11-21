@@ -61,7 +61,7 @@ public class DonorIndexMapper
 
         return new ClinicalDataIndex
         {
-            Sex = entity.SexId?.ToDefinitionString(),
+            Gender = entity.GenderId?.ToDefinitionString(),
             Age = entity.Age,
             Diagnosis = entity.Diagnosis,
             PrimarySite = entity.PrimarySite?.Value,

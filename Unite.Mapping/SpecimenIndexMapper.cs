@@ -225,7 +225,7 @@ public class SpecimenIndexMapper
                 Dss = entity.Dss,
                 DssSelective = entity.DssSelective,
                 Gof = entity.Gof,
-                Drug = entity.Entity.Name,
+                Drug = entity.Drug.Name,
                 MinConcentration = entity.MinConcentration,
                 MaxConcentration = entity.MaxConcentration,
                 AbsIC25 = entity.AbsIC25,

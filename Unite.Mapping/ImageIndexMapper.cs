@@ -43,7 +43,7 @@ public class ImageIndexMapper
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.Type = entity.TypeId.ToDefinitionString();
-        index.ScanningDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate);
+        index.ScanningDay = entity.ScanningDay ?? entity.ScanningDate?.RelativeFrom(diagnosisDate);
 
         index.Mri = CreateFrom(entity.MriImage);
     }
