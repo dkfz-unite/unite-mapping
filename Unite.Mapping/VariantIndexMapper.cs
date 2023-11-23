@@ -1,7 +1,8 @@
 ﻿using Unite.Data.Entities.Genome;
 using Unite.Data.Entities.Genome.Variants;
+using Unite.Data.Entities.Genome.Variants.Enums;
 using Unite.Data.Extensions;
-using Unite.Data.Utilities.Mutations;
+using Unite.Data.Utilities.SSM;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Variants;
 using Unite.Mapping;
@@ -46,21 +47,18 @@ public class VariantIndexMapper
             return;
         }
 
-        if (entity is SSM.Variant mutation)
+        if (entity is SSM.Variant ssm)
         {
-            Map(mutation, index);
+            Map(ssm, index);
         }
-        else if (entity is CNV.Variant copyNumberVariant)
+        else if (entity is CNV.Variant cnv)
         {
-            Map(copyNumberVariant, index);
+            Map(cnv, index);
         }
-        else if (entity is SV.Variant structuralVariant)
+        else if (entity is SV.Variant sv)
         {
-            Map(structuralVariant, index);
+            Map(sv, index);
         }
-
-        // index,Id - resolved by property getter
-        // index.Type - resolved by property getter
     }
 
     /// <summary>
@@ -75,6 +73,8 @@ public class VariantIndexMapper
             return;
         }
 
+        index.Id = $"{VariantType.SSM.ToDefinitionString()}{entity.Id}";
+        index.Type = VariantType.SSM.ToDefinitionString();
         index.Ssm = CreateFrom(entity);
     }
 
@@ -90,6 +90,8 @@ public class VariantIndexMapper
             return;
         }
 
+        index.Id = $"{VariantType.CNV.ToDefinitionString()}{entity.Id}";
+        index.Type = VariantType.CNV.ToDefinitionString();
         index.Cnv = CreateFrom(entity);
     }
 
@@ -105,6 +107,8 @@ public class VariantIndexMapper
             return;
         }
 
+        index.Id = $"{VariantType.SV.ToDefinitionString()}{entity.Id}";
+        index.Type = VariantType.SV.ToDefinitionString();
         index.Sv = CreateFrom(entity);
     }
 
