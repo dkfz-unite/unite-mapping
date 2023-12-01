@@ -10,7 +10,7 @@
     <Description>Unite mapping from domain models to indices package.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Unite.Data.Context" Version="7.0.0" />
+    <PackageReference Include="Unite.Data.Context" Version="7.1.0" />
     <PackageReference Include="Unite.Indices.Context" Version="7.0.0" />
   </ItemGroup>
 </Project>
