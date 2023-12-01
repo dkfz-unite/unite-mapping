@@ -1,6 +1,6 @@
 ﻿using Unite.Data.Entities.Donors;
 using Unite.Data.Entities.Donors.Clinical;
-using Unite.Data.Extensions;
+using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Donors;
 
 namespace Unite.Mapping;

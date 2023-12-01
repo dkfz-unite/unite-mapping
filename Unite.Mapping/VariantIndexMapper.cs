@@ -1,17 +1,16 @@
 ﻿using Unite.Data.Entities.Genome;
 using Unite.Data.Entities.Genome.Variants;
 using Unite.Data.Entities.Genome.Variants.Enums;
-using Unite.Data.Extensions;
-using Unite.Data.Utilities.SSM;
+using Unite.Data.Helpers.Genome.Variants.SSM;
+using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Variants;
-using Unite.Mapping;
 
 using CNV = Unite.Data.Entities.Genome.Variants.CNV;
 using SSM = Unite.Data.Entities.Genome.Variants.SSM;
 using SV = Unite.Data.Entities.Genome.Variants.SV;
 
-namespace Unite.Genome.Indices.Services.Mappers;
+namespace Unite.Mapping;
 
 public class VariantIndexMapper
 {

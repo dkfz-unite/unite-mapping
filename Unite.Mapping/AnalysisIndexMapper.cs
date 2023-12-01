@@ -1,5 +1,5 @@
 using Unite.Data.Entities.Genome.Analysis;
-using Unite.Data.Extensions;
+using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Analysis;
 
 namespace Unite.Mapping;

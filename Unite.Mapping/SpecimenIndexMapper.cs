@@ -1,5 +1,5 @@
 ﻿using Unite.Data.Entities.Specimens;
-using Unite.Data.Extensions;
+using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Specimens;
 
 using OrganoidIntervention = Unite.Data.Entities.Specimens.Organoids.Intervention;
