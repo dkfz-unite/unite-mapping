@@ -47,16 +47,15 @@ public class SpecimenIndexMapper
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.Type = entity.TypeId.ToDefinitionString();
-        index.CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate);
 
-        index.Tissue = CreateFromTissue(entity);
-        index.Cell = CreateFromCellLine(entity);
+        index.Tissue = CreateFromTissue(entity, diagnosisDate);
+        index.Cell = CreateFromCellLine(entity, diagnosisDate);
         index.Organoid = CreateFromOrganoid(entity, diagnosisDate);
         index.Xenograft = CreateFromXenograft(entity, diagnosisDate);
     }
 
 
-    private static TissueIndex CreateFromTissue(in Specimen entity)
+    private static TissueIndex CreateFromTissue(in Specimen entity, DateOnly? diagnosisDate)
     {
         if (entity.Tissue == null)
         {
@@ -65,7 +64,9 @@ public class SpecimenIndexMapper
 
         return new TissueIndex
         {
+            Id = entity.Id,
             ReferenceId = entity.Tissue.ReferenceId,
+            CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             Type = entity.Tissue.TypeId?.ToDefinitionString(),
             TumorType = entity.Tissue.TumorTypeId?.ToDefinitionString(),
@@ -75,7 +76,7 @@ public class SpecimenIndexMapper
         };
     }
 
-    private static CellLineIndex CreateFromCellLine(in Specimen entity)
+    private static CellLineIndex CreateFromCellLine(in Specimen entity, DateOnly? diagnosisDate)
     {
         if (entity.CellLine == null)
         {
@@ -84,7 +85,9 @@ public class SpecimenIndexMapper
 
         return new CellLineIndex
         {
+            Id = entity.Id,
             ReferenceId = entity.CellLine.ReferenceId,
+            CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             Species = entity.CellLine.SpeciesId?.ToDefinitionString(),
             Type = entity.CellLine.TypeId?.ToDefinitionString(),
@@ -113,7 +116,10 @@ public class SpecimenIndexMapper
 
         return new OrganoidIndex
         {
+            Id = entity.Id,
             ReferenceId = entity.Organoid.ReferenceId,
+            CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
+
             ImplantedCellsNumber = entity.Organoid.ImplantedCellsNumber,
             Tumorigenicity = entity.Organoid.Tumorigenicity,
             Medium = entity.Organoid.Medium,
@@ -154,7 +160,9 @@ public class SpecimenIndexMapper
 
         return new XenograftIndex
         {
+            Id = entity.Id,
             ReferenceId = entity.Xenograft.ReferenceId,
+            CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             MouseStrain = entity.Xenograft.MouseStrain,
             GroupSize = entity.Xenograft.GroupSize,

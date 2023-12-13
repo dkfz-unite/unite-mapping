@@ -43,13 +43,12 @@ public class ImageIndexMapper
         index.Id = entity.Id;
         index.ReferenceId = entity.ReferenceId;
         index.Type = entity.TypeId.ToDefinitionString();
-        index.CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate);
 
-        index.Mri = CreateFrom(entity.MriImage);
+        index.Mri = CreateFromMri(entity, diagnosisDate);
     }
 
 
-    private static MriImageIndex CreateFrom(in MriImage entity)
+    private static MriImageIndex CreateFromMri(in Image entity, DateOnly? diagnosisDate)
     {
         if (entity == null)
         {   
@@ -58,27 +57,29 @@ public class ImageIndexMapper
 
         return new MriImageIndex
         {
+            Id = entity.Id,
             ReferenceId = entity.ReferenceId,
+            CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
-            WholeTumor = entity.WholeTumor,
-            ContrastEnhancing = entity.ContrastEnhancing,
-            NonContrastEnhancing = entity.NonContrastEnhancing,
+            WholeTumor = entity.MriImage.WholeTumor,
+            ContrastEnhancing = entity.MriImage.ContrastEnhancing,
+            NonContrastEnhancing = entity.MriImage.NonContrastEnhancing,
 
-            MedianAdcTumor = entity.MedianAdcTumor,
-            MedianAdcCe = entity.MedianAdcCe,
-            MedianAdcEdema = entity.MedianAdcEdema,
+            MedianAdcTumor = entity.MriImage.MedianAdcTumor,
+            MedianAdcCe = entity.MriImage.MedianAdcCe,
+            MedianAdcEdema = entity.MriImage.MedianAdcEdema,
 
-            MedianCbfTumor = entity.MedianCbfTumor,
-            MedianCbfCe = entity.MedianCbfCe,
-            MedianCbfEdema = entity.MedianCbfEdema,
+            MedianCbfTumor = entity.MriImage.MedianCbfTumor,
+            MedianCbfCe = entity.MriImage.MedianCbfCe,
+            MedianCbfEdema = entity.MriImage.MedianCbfEdema,
 
-            MedianCbvTumor = entity.MedianCbvTumor,
-            MedianCbvCe = entity.MedianCbvCe,
-            MedianCbvEdema = entity.MedianCbvEdema,
+            MedianCbvTumor = entity.MriImage.MedianCbvTumor,
+            MedianCbvCe = entity.MriImage.MedianCbvCe,
+            MedianCbvEdema = entity.MriImage.MedianCbvEdema,
 
-            MedianMttTumor = entity.MedianMttTumor,
-            MedianMttCe = entity.MedianMttCe,
-            MedianMttEdema = entity.MedianMttEdema
+            MedianMttTumor = entity.MriImage.MedianMttTumor,
+            MedianMttCe = entity.MriImage.MedianMttCe,
+            MedianMttEdema = entity.MriImage.MedianMttEdema
         };
     }
 }
