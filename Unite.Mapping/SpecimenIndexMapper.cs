@@ -167,7 +167,7 @@ public class SpecimenIndexMapper
             MouseStrain = entity.Xenograft.MouseStrain,
             GroupSize = entity.Xenograft.GroupSize,
             ImplantType = entity.Xenograft.ImplantTypeId?.ToDefinitionString(),
-            TissueLocation = entity.Xenograft.TissueLocationId?.ToDefinitionString(),
+            ImplantLocation = entity.Xenograft.ImplantLocationId?.ToDefinitionString(),
             ImplantedCellsNumber = entity.Xenograft.ImplantedCellsNumber,
             Tumorigenicity = entity.Xenograft.Tumorigenicity,
             TumorGrowthForm = entity.Xenograft.TumorGrowthFormId?.ToDefinitionString(),
@@ -234,11 +234,11 @@ public class SpecimenIndexMapper
                 DssSelective = entity.DssSelective,
                 Gof = entity.Gof,
                 Drug = entity.Drug.Name,
-                MinConcentration = entity.MinConcentration,
-                MaxConcentration = entity.MaxConcentration,
                 AbsIC25 = entity.AbsIC25,
                 AbsIC50 = entity.AbsIC50,
-                AbsIC75 = entity.AbsIC75
+                AbsIC75 = entity.AbsIC75,
+                MinConcentration = entity.MinConcentration,
+                MaxConcentration = entity.MaxConcentration
             };
 
         }).ToArray();
