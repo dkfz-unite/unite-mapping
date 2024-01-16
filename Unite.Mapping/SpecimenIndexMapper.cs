@@ -2,9 +2,6 @@
 using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Specimens;
 
-using OrganoidIntervention = Unite.Data.Entities.Specimens.Organoids.Intervention;
-using XenograftIntervention = Unite.Data.Entities.Specimens.Xenografts.Intervention;
-
 namespace Unite.Mapping;
 
 
@@ -125,30 +122,9 @@ public class SpecimenIndexMapper
             Medium = entity.Organoid.Medium,
 
             MolecularData = CreateFrom(entity.MolecularData),
-            DrugScreenings = CreateFrom(entity.DrugScreenings),
-            Interventions = CreateFrom(entity.Organoid.Interventions, diagnosisDate)
+            Interventions = CreateFrom(entity.Interventions, diagnosisDate),
+            DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
-    }
-
-    private static OrganoidInterventionIndex[] CreateFrom(in IEnumerable<OrganoidIntervention> entities, DateOnly? diagnosisDate)
-    {
-        if (entities?.Any() != true)
-        {
-            return null;
-        }
-
-        return entities.Select(entity =>
-        {
-            return new OrganoidInterventionIndex
-            {
-                Type = entity.Type.Name,
-                Details = entity.Details,
-                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
-                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
-                Results = entity.Results
-            };
-
-        }).ToArray();
     }
 
     private static XenograftIndex CreateFromXenograft(in Specimen entity, DateOnly? diagnosisDate)
@@ -175,30 +151,9 @@ public class SpecimenIndexMapper
             SurvivalDaysTo = entity.Xenograft.SurvivalDaysTo,
 
             MolecularData = CreateFrom(entity.MolecularData),
-            DrugScreenings = CreateFrom(entity.DrugScreenings),
-            Interventions = CreateFrom(entity.Xenograft.Interventions, diagnosisDate)
+            Interventions = CreateFrom(entity.Interventions, diagnosisDate),
+            DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
-    }
-
-    private static XenograftInterventionIndex[] CreateFrom(in IEnumerable<XenograftIntervention> entities, DateOnly? diagnosisDate)
-    {
-        if (entities?.Any() != true)
-        {
-            return null;
-        }
-
-        return entities.Select(entity =>
-        {
-            return new XenograftInterventionIndex
-            {
-                Type = entity.Type.Name,
-                Details = entity.Details,
-                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
-                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
-                Results = entity.Results
-            };
-
-        }).ToArray();
     }
 
     private static MolecularDataIndex CreateFrom(in MolecularData entity)
@@ -217,6 +172,27 @@ public class SpecimenIndexMapper
             MethylationSubtype = entity.MethylationSubtypeId?.ToDefinitionString(),
             GcimpMethylation = entity.GcimpMethylation
         };
+    }
+
+    private static InterventionIndex[] CreateFrom(in IEnumerable<Intervention> entities, DateOnly? diagnosisDate)
+    {
+        if (entities?.Any() != true)
+        {
+            return null;
+        }
+
+        return entities.Select(entity =>
+        {
+            return new InterventionIndex
+            {
+                Type = entity.Type.Name,
+                Details = entity.Details,
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
+                Results = entity.Results
+            };
+
+        }).ToArray();
     }
 
     private static DrugScreeningIndex[] CreateFrom(in IEnumerable<DrugScreening> entities)
