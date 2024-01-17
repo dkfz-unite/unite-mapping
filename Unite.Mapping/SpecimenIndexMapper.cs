@@ -45,59 +45,59 @@ public class SpecimenIndexMapper
         index.ReferenceId = entity.ReferenceId;
         index.Type = entity.TypeId.ToDefinitionString();
 
-        index.Tissue = CreateFromTissue(entity, diagnosisDate);
-        index.Cell = CreateFromCellLine(entity, diagnosisDate);
+        index.Material = CreateFromMaterial(entity, diagnosisDate);
+        index.Line = CreateFromLine(entity, diagnosisDate);
         index.Organoid = CreateFromOrganoid(entity, diagnosisDate);
         index.Xenograft = CreateFromXenograft(entity, diagnosisDate);
     }
 
 
-    private static TissueIndex CreateFromTissue(in Specimen entity, DateOnly? diagnosisDate)
+    private static MaterialIndex CreateFromMaterial(in Specimen entity, DateOnly? diagnosisDate)
     {
-        if (entity.Tissue == null)
+        if (entity.Material == null)
         {
             return null;
         }
 
-        return new TissueIndex
+        return new MaterialIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.Tissue.ReferenceId,
+            ReferenceId = entity.Material.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
-            Type = entity.Tissue.TypeId?.ToDefinitionString(),
-            TumorType = entity.Tissue.TumorTypeId?.ToDefinitionString(),
-            Source = entity.Tissue.Source?.Value,
+            Type = entity.Material.TypeId?.ToDefinitionString(),
+            TumorType = entity.Material.TumorTypeId?.ToDefinitionString(),
+            Source = entity.Material.Source?.Value,
 
             MolecularData = CreateFrom(entity.MolecularData)
         };
     }
 
-    private static CellLineIndex CreateFromCellLine(in Specimen entity, DateOnly? diagnosisDate)
+    private static LineIndex CreateFromLine(in Specimen entity, DateOnly? diagnosisDate)
     {
-        if (entity.CellLine == null)
+        if (entity.Line == null)
         {
             return null;
         }
 
-        return new CellLineIndex
+        return new LineIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.CellLine.ReferenceId,
+            ReferenceId = entity.Line.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
-            Species = entity.CellLine.SpeciesId?.ToDefinitionString(),
-            Type = entity.CellLine.TypeId?.ToDefinitionString(),
-            CultureType = entity.CellLine.CultureTypeId?.ToDefinitionString(),
+            CellsSpecies = entity.Line.CellsSpeciesId?.ToDefinitionString(),
+            CellsType = entity.Line.CellsTypeId?.ToDefinitionString(),
+            CellsCultureType = entity.Line.CellsCultureTypeId?.ToDefinitionString(),
 
-            Name = entity.CellLine.Info?.Name,
-            DepositorName = entity.CellLine.Info?.DepositorName,
-            DepositorEstablishment = entity.CellLine.Info?.DepositorEstablishment,
-            EstablishmentDate = entity.CellLine.Info?.EstablishmentDate,
+            Name = entity.Line.Info?.Name,
+            DepositorName = entity.Line.Info?.DepositorName,
+            DepositorEstablishment = entity.Line.Info?.DepositorEstablishment,
+            EstablishmentDate = entity.Line.Info?.EstablishmentDate,
 
-            PubMedLink = entity.CellLine.Info?.PubMedLink,
-            AtccLink = entity.CellLine.Info?.AtccLink,
-            ExPasyLink = entity.CellLine.Info?.ExPasyLink,
+            PubMedLink = entity.Line.Info?.PubMedLink,
+            AtccLink = entity.Line.Info?.AtccLink,
+            ExPasyLink = entity.Line.Info?.ExPasyLink,
 
             MolecularData = CreateFrom(entity.MolecularData),
             DrugScreenings = CreateFrom(entity.DrugScreenings)
