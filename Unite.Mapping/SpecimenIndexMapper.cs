@@ -122,7 +122,7 @@ public class SpecimenIndexMapper
             Medium = entity.Organoid.Medium,
 
             MolecularData = CreateFrom(entity.MolecularData),
-            Interventions = CreateFrom(entity.Interventions, diagnosisDate),
+            Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
             DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
     }
@@ -151,7 +151,7 @@ public class SpecimenIndexMapper
             SurvivalDaysTo = entity.Xenograft.SurvivalDaysTo,
 
             MolecularData = CreateFrom(entity.MolecularData),
-            Interventions = CreateFrom(entity.Interventions, diagnosisDate),
+            Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
             DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
     }
@@ -174,7 +174,7 @@ public class SpecimenIndexMapper
         };
     }
 
-    private static InterventionIndex[] CreateFrom(in IEnumerable<Intervention> entities, DateOnly? diagnosisDate)
+    private static InterventionIndex[] CreateFrom(in IEnumerable<Intervention> entities, DateOnly? creationDate)
     {
         if (entities?.Any() != true)
         {
@@ -187,7 +187,7 @@ public class SpecimenIndexMapper
             {
                 Type = entity.Type.Name,
                 Details = entity.Details,
-                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(diagnosisDate),
+                StartDay = entity.StartDay ?? entity.StartDate?.RelativeFrom(creationDate),
                 DurationDays = entity.DurationDays ?? entity.EndDate?.RelativeFrom(entity.StartDate),
                 Results = entity.Results
             };

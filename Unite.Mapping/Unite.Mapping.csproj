@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ReleaseVersion>1.4.0</ReleaseVersion>
-    <Version>1.4.0</Version>
+    <ReleaseVersion>1.5.0</ReleaseVersion>
+    <Version>1.5.0</Version>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <RepositoryUrl>https://github.com/dkfz-unite/unite-mapping</RepositoryUrl>
     <Authors>Valiantsin Ulasau (DKFZ)</Authors>
