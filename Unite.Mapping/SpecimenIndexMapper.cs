@@ -100,6 +100,7 @@ public class SpecimenIndexMapper
             ExPasyLink = entity.Line.Info?.ExPasyLink,
 
             MolecularData = CreateFrom(entity.MolecularData),
+            Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
             DrugScreenings = CreateFrom(entity.DrugScreenings)
         };
     }
