@@ -2,15 +2,15 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ReleaseVersion>1.8.1</ReleaseVersion>
-    <Version>1.8.1</Version>
+    <ReleaseVersion>1.8.2</ReleaseVersion>
+    <Version>1.8.2</Version>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <RepositoryUrl>https://github.com/dkfz-unite/unite-mapping</RepositoryUrl>
     <Authors>Valiantsin Ulasau (DKFZ)</Authors>
     <Description>Unite mapping from domain models to indices package.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Unite.Data.Context" Version="6.5.2" />
-    <PackageReference Include="Unite.Indices.Context" Version="6.5.4" />
+    <PackageReference Include="Unite.Data.Context" Version="6.6.0" />
+    <PackageReference Include="Unite.Indices.Context" Version="6.5.5" />
   </ItemGroup>
 </Project>
