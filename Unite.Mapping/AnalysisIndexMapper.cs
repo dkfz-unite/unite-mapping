@@ -46,5 +46,7 @@ public class AnalysisIndexMapper
         index.Day = entity.Analysis.Day ?? entity.Analysis.Date?.RelativeFrom(diagnosisDate);
         index.Purity = entity.Purity;
         index.Ploidy = entity.Ploidy;
+        index.CellsNumber = entity.CellsNumber;
+        index.GenesModel = entity.GenesModel;
     }
 }
