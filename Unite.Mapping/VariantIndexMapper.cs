@@ -150,7 +150,7 @@ public class VariantIndexMapper
             Length = entity.Length.Value,
             Type = entity.TypeId.ToDefinitionString(),
             Loh = entity.Loh,
-            HomoDel = entity.HomoDel,
+            Del = entity.Del,
             C1Mean = entity.C1Mean,
             C2Mean = entity.C2Mean,
             TcnMean = entity.TcnMean,
