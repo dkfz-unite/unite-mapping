@@ -1,14 +1,14 @@
 ﻿using Unite.Data.Entities.Genome;
-using Unite.Data.Entities.Genome.Variants;
-using Unite.Data.Entities.Genome.Variants.Enums;
-using Unite.Data.Helpers.Genome.Variants.SSM;
+using Unite.Data.Entities.Genome.Analysis.Dna;
+using Unite.Data.Entities.Genome.Analysis.Dna.Enums;
+using Unite.Data.Helpers.Genome.Variants.Ssm;
 using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Genome;
-using Unite.Indices.Entities.Basic.Genome.Variants;
+using Unite.Indices.Entities.Basic.Genome.Dna;
 
-using CNV = Unite.Data.Entities.Genome.Variants.CNV;
-using SSM = Unite.Data.Entities.Genome.Variants.SSM;
-using SV = Unite.Data.Entities.Genome.Variants.SV;
+using SSM = Unite.Data.Entities.Genome.Analysis.Dna.Ssm;
+using CNV = Unite.Data.Entities.Genome.Analysis.Dna.Cnv;
+using SV = Unite.Data.Entities.Genome.Analysis.Dna.Sv;
 
 namespace Unite.Mapping;
 
@@ -254,7 +254,7 @@ public class VariantIndexMapper
         {
             Feature = CreateFrom(entity.Feature),
             Distance = entity.Distance,
-            AminoAcidChange = AAChangeCodeGenerator.Generate(entity.ProteinStart, entity.ProteinEnd, entity.AminoAcidChange),
+            AminoAcidChange = ProteinChangeCodeGenerator.Generate(entity.ProteinStart, entity.ProteinEnd, entity.AminoAcidChange),
             CodonChange = CodonChangeCodeGenerator.Generate(entity.CDSStart, entity.CDSEnd, entity.CodonChange)
         };
     }

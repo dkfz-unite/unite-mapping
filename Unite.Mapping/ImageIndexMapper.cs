@@ -1,6 +1,9 @@
 ﻿using Unite.Data.Entities.Images;
+using Unite.Data.Entities.Images.Analysis.Enums;
+using Unite.Data.Entities.Images.Analysis.Radiomics;
 using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Images;
+using Unite.Indices.Entities.Basic.Images.Radiomics;
 
 namespace Unite.Mapping;
 
@@ -79,7 +82,27 @@ public class ImageIndexMapper
 
             MedianMttTumor = entity.MriImage.MedianMttTumor,
             MedianMttCe = entity.MriImage.MedianMttCe,
-            MedianMttEdema = entity.MriImage.MedianMttEdema
+            MedianMttEdema = entity.MriImage.MedianMttEdema,
+
+            RadiomicsFeatures = CreateFrom(entity.Samples?.FirstOrDefault(sample => sample.Analysis.TypeId == AnalysisType.RFE)?.RadiomicsFeatureEntries)
         };
+    }
+
+    private static FeatureEntryIndex[] CreateFrom(in IEnumerable<FeatureEntry> entities)
+    {
+        if (entities?.Any() != true)
+        {
+            return null;
+        }
+
+        return entities.Select(entity =>
+        {
+            return new FeatureEntryIndex
+            {
+                Feature = entity.Entity.Name,
+                Value = entity.Value
+            };
+
+        }).ToArray();
     }
 }

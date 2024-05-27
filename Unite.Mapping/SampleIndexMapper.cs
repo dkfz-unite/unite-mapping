@@ -4,7 +4,7 @@ using Unite.Indices.Entities.Basic.Analysis;
 
 namespace Unite.Mapping;
 
-public class AnalysisIndexMapper
+public class SampleIndexMapper
 {
     /// <summary>
     /// Creates an index from the entity. Returns null if entity is null.
@@ -13,7 +13,7 @@ public class AnalysisIndexMapper
     /// <param name="diagnosisDate">Diagnosis date (anchor date for calculation of relative days).</param>
     /// <typeparam name="T">Type of the index.</typeparam>
     /// <returns>Index created from the entity.</returns>
-    public static T CreateFrom<T>(in AnalysedSample entity, DateOnly? diagnosisDate) where T : AnalysisIndex, new()
+    public static T CreateFrom<T>(in Sample entity, DateOnly? diagnosisDate) where T : SampleIndex, new()
     {
         if (entity == null)
         {
@@ -33,7 +33,7 @@ public class AnalysisIndexMapper
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
     /// <param name="diagnosisDate">Diagnosis date (anchor date for calculation of relative days).</param>
-    public static void Map(in AnalysedSample entity, AnalysisIndex index, DateOnly? diagnosisDate)
+    public static void Map(in Sample entity, SampleIndex index, DateOnly? diagnosisDate)
     {
         if (entity == null || index == null)
         {
@@ -41,9 +41,8 @@ public class AnalysisIndexMapper
         }
 
         index.Id = entity.Analysis.Id;
-        index.ReferenceId = entity.Analysis.ReferenceId;
-        index.Type = entity.Analysis.TypeId.ToDefinitionString();
-        index.Day = entity.Analysis.Day ?? entity.Analysis.Date?.RelativeFrom(diagnosisDate);
+        index.AnalysisType = entity.Analysis.TypeId.ToDefinitionString();
+        index.AnalysisDay = entity.Analysis.Day ?? entity.Analysis.Date?.RelativeFrom(diagnosisDate);
         index.Purity = entity.Purity;
         index.Ploidy = entity.Ploidy;
         index.CellsNumber = entity.CellsNumber;

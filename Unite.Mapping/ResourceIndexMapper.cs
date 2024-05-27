@@ -11,7 +11,7 @@ public class ResourceIndexMapper
     /// <param name="entity">Entity.</param>
     /// <typeparam name="T">Type of the index.</typeparam>
     /// <returns>Index created from the entity.</returns>
-    public static T CreateFrom<T>(in AnalysedSampleResource entity) where T : ResourceIndex, new()
+    public static T CreateFrom<T>(in SampleResource entity) where T : ResourceIndex, new()
     {
         if (entity == null)
         {
@@ -31,7 +31,7 @@ public class ResourceIndexMapper
     /// </summary>
     /// <param name="entity">Entity.</param>
     /// <param name="index">Index.</param>
-    public static void Map(in AnalysedSampleResource entity, ResourceIndex index)
+    public static void Map(in SampleResource entity, ResourceIndex index)
     {
         if (entity == null || index == null)
         {
@@ -40,7 +40,7 @@ public class ResourceIndexMapper
 
         index.Id = entity.Id;
         index.Type = entity.Type;
-        index.Path = entity.Path;
+        index.Format = entity.Format;
         index.Url = entity.Url;
     }
 }

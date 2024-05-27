@@ -1,6 +1,9 @@
 ﻿using Unite.Data.Entities.Specimens;
+using Unite.Data.Entities.Specimens.Analysis.Drugs;
+using Unite.Data.Entities.Specimens.Analysis.Enums;
 using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Specimens;
+using Unite.Indices.Entities.Basic.Specimens.Drugs;
 
 namespace Unite.Mapping;
 
@@ -62,7 +65,7 @@ public class SpecimenIndexMapper
         return new MaterialIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.Material.ReferenceId,
+            ReferenceId = entity.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             Type = entity.Material.TypeId?.ToDefinitionString(),
@@ -83,7 +86,7 @@ public class SpecimenIndexMapper
         return new LineIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.Line.ReferenceId,
+            ReferenceId = entity.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             CellsSpecies = entity.Line.CellsSpeciesId?.ToDefinitionString(),
@@ -101,7 +104,7 @@ public class SpecimenIndexMapper
 
             MolecularData = CreateFrom(entity.MolecularData),
             Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
-            DrugScreenings = CreateFrom(entity.DrugScreenings)
+            DrugScreenings = CreateFrom(entity.SpecimenSamples?.FirstOrDefault(sample => sample.Analysis.TypeId == AnalysisType.DSA)?.DrugScreenings)
         };
     }
 
@@ -115,7 +118,7 @@ public class SpecimenIndexMapper
         return new OrganoidIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.Organoid.ReferenceId,
+            ReferenceId = entity.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             ImplantedCellsNumber = entity.Organoid.ImplantedCellsNumber,
@@ -124,7 +127,7 @@ public class SpecimenIndexMapper
 
             MolecularData = CreateFrom(entity.MolecularData),
             Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
-            DrugScreenings = CreateFrom(entity.DrugScreenings)
+            DrugScreenings = CreateFrom(entity.SpecimenSamples?.FirstOrDefault(sample => sample.Analysis.TypeId == AnalysisType.DSA)?.DrugScreenings)
         };
     }
 
@@ -138,7 +141,7 @@ public class SpecimenIndexMapper
         return new XenograftIndex
         {
             Id = entity.Id,
-            ReferenceId = entity.Xenograft.ReferenceId,
+            ReferenceId = entity.ReferenceId,
             CreationDay = entity.CreationDay ?? entity.CreationDate?.RelativeFrom(diagnosisDate),
 
             MouseStrain = entity.Xenograft.MouseStrain,
@@ -153,7 +156,7 @@ public class SpecimenIndexMapper
 
             MolecularData = CreateFrom(entity.MolecularData),
             Interventions = CreateFrom(entity.Interventions, entity.CreationDate),
-            DrugScreenings = CreateFrom(entity.DrugScreenings)
+            DrugScreenings = CreateFrom(entity.SpecimenSamples?.FirstOrDefault(sample => sample.Analysis.TypeId == AnalysisType.DSA)?.DrugScreenings)
         };
     }
 
@@ -210,7 +213,7 @@ public class SpecimenIndexMapper
                 Dss = entity.Dss,
                 DssSelective = entity.DssSelective,
                 Gof = entity.Gof,
-                Drug = entity.Drug.Name,
+                Drug = entity.Entity.Name,
                 AbsIC25 = entity.AbsIC25,
                 AbsIC50 = entity.AbsIC50,
                 AbsIC75 = entity.AbsIC75,
