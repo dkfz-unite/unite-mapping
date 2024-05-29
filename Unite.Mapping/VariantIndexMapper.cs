@@ -1,7 +1,7 @@
 ﻿using Unite.Data.Entities.Genome;
 using Unite.Data.Entities.Genome.Analysis.Dna;
 using Unite.Data.Entities.Genome.Analysis.Dna.Enums;
-using Unite.Data.Helpers.Genome.Variants.Ssm;
+using Unite.Data.Helpers.Genome.Dna.Ssm;
 using Unite.Essentials.Extensions;
 using Unite.Indices.Entities.Basic.Genome;
 using Unite.Indices.Entities.Basic.Genome.Dna;
@@ -199,7 +199,7 @@ public class VariantIndexMapper
             {
                 Gene = CreateFrom(entity.Feature?.Gene),
                 Transcript = CreateFrom(entity),
-                Consequences = CreateFrom(entity.Consequences)
+                Effects = CreateFrom(entity.Effects)
             };
 
         }).ToArray();
@@ -218,7 +218,7 @@ public class VariantIndexMapper
             {
                 Gene = CreateFrom(entity.Feature?.Gene),
                 Transcript = CreateFrom(entity),
-                Consequences = CreateFrom(entity.Consequences)
+                Effects = CreateFrom(entity.Effects)
             };
 
         }).ToArray();
@@ -237,7 +237,7 @@ public class VariantIndexMapper
             {
                 Gene = CreateFrom(entity.Feature?.Gene),
                 Transcript = CreateFrom(entity),
-                Consequences = CreateFrom(entity.Consequences)
+                Effects = CreateFrom(entity.Effects)
             };
 
         }).ToArray();
@@ -291,7 +291,7 @@ public class VariantIndexMapper
         };
     }
 
-    private static ConsequenceIndex[] CreateFrom(in IEnumerable<Consequence> entities)
+    private static EffectIndex[] CreateFrom(in IEnumerable<Effect> entities)
     {
         if (entities?.Any() != true)
         {
@@ -300,7 +300,7 @@ public class VariantIndexMapper
 
         return entities.Select(entity =>
         {
-            return new ConsequenceIndex
+            return new EffectIndex
             {
                 Type = entity.Type,
                 Impact = entity.Impact,
