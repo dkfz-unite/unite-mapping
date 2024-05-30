@@ -40,7 +40,7 @@ public class SampleIndexMapper
             return;
         }
 
-        index.Id = entity.Analysis.Id;
+        index.Id = entity.Id;
         index.AnalysisType = entity.Analysis.TypeId.ToDefinitionString();
         index.AnalysisDay = entity.Analysis.Day ?? entity.Analysis.Date?.RelativeFrom(diagnosisDate);
         index.Purity = entity.Purity;
