@@ -210,15 +210,15 @@ public class SpecimenIndexMapper
         {
             return new DrugScreeningIndex
             {
-                Dss = entity.Dss,
-                DssSelective = entity.DssSelective,
-                Gof = entity.Gof,
                 Drug = entity.Entity.Name,
-                AbsIC25 = entity.AbsIC25,
-                AbsIC50 = entity.AbsIC50,
-                AbsIC75 = entity.AbsIC75,
-                MinConcentration = entity.MinConcentration,
-                MaxConcentration = entity.MaxConcentration
+                Gof = entity.Gof,
+                Dss = entity.Dss,
+                DssS = entity.DssS,
+                MinDose = entity.MinDose,
+                MaxDose = entity.MaxDose,
+                Dose25 = entity.Dose25,
+                Dose50 = entity.Dose50,
+                Dose75 = entity.Dose75
             };
 
         }).ToArray();
