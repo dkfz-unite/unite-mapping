@@ -254,7 +254,7 @@ public class VariantIndexMapper
         {
             Feature = CreateFrom(entity.Feature),
             Distance = entity.Distance,
-            AminoAcidChange = ProteinChangeCodeGenerator.Generate(entity.ProteinStart, entity.ProteinEnd, entity.AminoAcidChange),
+            ProteinChange = ProteinChangeCodeGenerator.Generate(entity.ProteinStart, entity.ProteinEnd, entity.ProteinChange),
             CodonChange = CodonChangeCodeGenerator.Generate(entity.CDSStart, entity.CDSEnd, entity.CodonChange)
         };
     }
