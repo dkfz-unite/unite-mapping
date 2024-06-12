@@ -121,7 +121,7 @@ public class VariantIndexMapper
 
         return new SsmIndex
         {
-            Id = entity.Id,
+            Id = $"{VariantType.SSM.ToDefinitionString()}{entity.Id}",
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
             Start = entity.Start,
             End = entity.End,
@@ -143,7 +143,7 @@ public class VariantIndexMapper
 
         return new CnvIndex
         {
-            Id = entity.Id,
+            Id = $"{VariantType.CNV.ToDefinitionString()}{entity.Id}",
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
             Start = entity.Start,
             End = entity.End,
@@ -171,7 +171,7 @@ public class VariantIndexMapper
 
         return new SvIndex
         {
-            Id = entity.Id,
+            Id = $"{VariantType.SV.ToDefinitionString()}{entity.Id}",
             Chromosome = entity.ChromosomeId.ToDefinitionString(),
             Start = entity.Start,
             End = entity.End,
