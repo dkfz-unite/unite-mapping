@@ -43,9 +43,9 @@ public class SampleIndexMapper
         index.Id = entity.Id;
         index.AnalysisType = entity.Analysis.TypeId.ToDefinitionString();
         index.AnalysisDay = entity.Analysis.Day ?? entity.Analysis.Date?.RelativeFrom(diagnosisDate);
+        index.Genome = entity.Genome;
         index.Purity = entity.Purity;
         index.Ploidy = entity.Ploidy;
-        index.CellsNumber = entity.CellsNumber;
-        index.GenesModel = entity.GenesModel;
+        index.Cells = entity.Cells;
     }
 }
