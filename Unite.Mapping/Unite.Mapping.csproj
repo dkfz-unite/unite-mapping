@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ReleaseVersion>3.1.0</ReleaseVersion>
-    <Version>3.1.0</Version>
+    <ReleaseVersion>3.2.0</ReleaseVersion>
+    <Version>3.2.0</Version>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <RepositoryUrl>https://github.com/dkfz-unite/unite-mapping</RepositoryUrl>
     <Authors>Valiantsin Ulasau (DKFZ)</Authors>
@@ -11,6 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Unite.Data.Context" Version="8.1.0" />
-    <PackageReference Include="Unite.Indices.Context" Version="8.1.0" />
+    <PackageReference Include="Unite.Indices.Context" Version="8.2.0" />
   </ItemGroup>
 </Project>
